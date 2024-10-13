@@ -12,13 +12,11 @@ namespace NatechAPI.Services
     {
         private readonly ApplicationDbContext dbContext;
         private readonly ExternalApiService externalApiService;
-        
         public CatsService(ApplicationDbContext context, ExternalApiService externalApiService, ConfigureServices configureServices)
         {
             this.dbContext = context;
             this.externalApiService = externalApiService;
         }
-
         public async Task<HashSet<string>> AddCatsToDb() 
         {
             List<CatVM> catVMs = new List<CatVM>();
@@ -56,7 +54,6 @@ namespace NatechAPI.Services
                 return insCats;
             }
         }
-
         public async Task<GetCatsPegResponseVM> GetCatsWithPegination(int page, int pageSize) 
         {
             try
@@ -81,7 +78,6 @@ namespace NatechAPI.Services
                 return null;
             }
         }
-
         public async Task<GetCatsPegResponseVM> GetCatsWithPegination(string tag,int page, int pageSize)
         {
             try
@@ -168,7 +164,6 @@ namespace NatechAPI.Services
                 return null;
             }
         }
-
         private bool InsertCatsToDbContext(List<CatVM> catVMs,ref HashSet<string> tags,out HashSet<string> insertedCats)
         {
             insertedCats = new HashSet<string>();
@@ -243,7 +238,6 @@ namespace NatechAPI.Services
                 return false;
             }
         }
-
         private async Task<bool> InsertRelationsToDb(List<CatVM> catVMs)
         {
             using (var transaction = await dbContext.Database.BeginTransactionAsync())
