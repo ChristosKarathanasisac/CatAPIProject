@@ -12,9 +12,9 @@ namespace NatechAPI.Services
             this.configureServices = configureServices;
         }
 
-        public async Task<ResponseVM> GetDataFromExternalApiAsync()
+        public async Task<ExternalApiResponseVM> GetDataFromExternalApiAsync()
         {
-            ResponseVM resp = new ResponseVM();
+            ExternalApiResponseVM resp = new ExternalApiResponseVM();
             using (HttpClient client = new HttpClient())
             {
                 try

@@ -57,12 +57,63 @@ namespace NatechAPI.Services
             }
         }
 
+        public async Task<GetCatsPegResponseVM> GetCatsWithPegination(int page, int pageSize) 
+        {
+            try
+            {
+                int skip = (page - 1) * pageSize;
+                int totalCats = await dbContext.Cats.CountAsync();
+
+                List<CatEntity> cats = await dbContext.Cats
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                int totalPages = (int)Math.Ceiling(totalCats / (double)pageSize);
+
+
+                GetCatsPegResponseVM resp = new GetCatsPegResponseVM
+                {
+                    TotalCats = totalCats,
+                    CurrentPage = page,
+                    PageSize = pageSize,
+                    TotalPages = totalPages,
+                    Cats = new List<ReturnedCatsVM>()
+                };
+
+                foreach (CatEntity cat in cats)
+                {
+                    var catWithTags = await dbContext.Cats
+                                                        .Where(c => c.CatId == cat.CatId)
+                                                        .Include(c => c.CatTags)
+                                                         .ThenInclude(ct => ct.TagEntity)
+                                                        .FirstOrDefaultAsync();
+
+
+                    ReturnedCatsVM returnedCatsVM = new ReturnedCatsVM
+                    {
+                        CatId = catWithTags.CatId,
+                        Width = catWithTags.Width,
+                        Height = catWithTags.Height,
+                        Image = catWithTags.Image,
+                        Tags = string.Join(',', catWithTags.CatTags.Select(ct => ct.TagEntity.Name).ToList())
+                    };
+                    resp.Cats.Add(returnedCatsVM);
+                }
+                return resp;
+            }
+            catch (Exception exc) 
+            {
+                //Some log
+                return null;
+            }
+        }
         private async Task<List<CatVM>> GetCatsFromApi() 
         {
             try
             {
                 List<CatVM> catsForReturn = new List<CatVM>();
-                ResponseVM responseVM = new ResponseVM();
+                ExternalApiResponseVM responseVM = new ExternalApiResponseVM();
                 responseVM = await externalApiService.GetDataFromExternalApiAsync();
 
                 if (responseVM.IsSuccess)
