@@ -16,6 +16,12 @@ namespace NatechAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<CatEntity>()
+                .HasIndex(c => c.CatId).IsUnique();
+
+            modelBuilder.Entity<TagEntity>()
+                .HasIndex(c => c.Name).IsUnique();
+
             modelBuilder.Entity<CatTag>()
                 .HasKey(ct => new { ct.CatEntityId, ct.TagEntityId });
 

@@ -7,7 +7,7 @@ namespace NatechAPI.Models.Entities
     {
         public Guid Id { get; set; } 
         public required string Name { get; set; }
-        public required DateTime Created { get; set; } = DateTime.UtcNow;
+        public required DateTime Created { get; set; }
         public ICollection<CatTag> CatTags { get; set; } = new List<CatTag>();
     }
 }

@@ -11,7 +11,7 @@ namespace NatechAPI.Models.Entities
         public int? Width { get; set; }  
         public int? Height { get; set; }  
         public required string Image { get; set; }  
-        public required DateTime Created { get; set; } = DateTime.UtcNow;
+        public required DateTime Created { get; set; }
         public ICollection<CatTag> CatTags { get; set; } = new List<CatTag>();
     }
 }

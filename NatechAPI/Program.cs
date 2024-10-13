@@ -11,6 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.Configure<ConfigureServices>(
+    builder.Configuration.GetSection("ExternalApi"));
+
 //Configure DBContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -18,6 +21,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 //Configure the Services
 builder.Services.AddTransient<ExternalApiService>(); 
 builder.Services.AddTransient<CatsService>();
+builder.Services.AddTransient<ConfigureServices>();
 
 var app = builder.Build();
 

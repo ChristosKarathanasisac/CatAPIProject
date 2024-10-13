@@ -17,19 +17,35 @@ namespace NatechAPI.Controllers
             this.catsService = catsService;
         }
 
-        [HttpGet]
-        [Route("{page:int}")]
-        public IActionResult Get(int page) 
+        [HttpPost]
+        [Route("fetch")]
+        public async Task<IActionResult> FetchCats()
         {
-            if (catsService.AddCatsToDb())
+            try
             {
-                return Ok();
+                HashSet<string> insertedCats = await catsService.AddCatsToDb();
+                if (insertedCats != null)
+                {
+                    //Some message
+                    return Ok("Cats data fetched and added to the database.");
+                }
+                else
+                {
+                    return StatusCode(500, $"Internal server error.");
+                }
             }
-            else 
+            catch (Exception ex)
             {
-                return BadRequest();
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-            
         }
+
+        //[HttpGet]
+        //[Route("{page:int}")]
+        //public async Task<IActionResult> Get(int page) 
+        //{
+            
+            
+        //}
     }
 }

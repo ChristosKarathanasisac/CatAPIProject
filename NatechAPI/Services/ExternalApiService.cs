@@ -5,14 +5,22 @@ namespace NatechAPI.Services
 {
     public class ExternalApiService 
     {
-        public async Task<ResponseVM> GetDataFromExternalApiAsync(string url)
+        private readonly ConfigureServices configureServices;
+
+        public ExternalApiService(ConfigureServices configureServices)
+        {
+            this.configureServices = configureServices;
+        }
+
+        public async Task<ResponseVM> GetDataFromExternalApiAsync()
         {
             ResponseVM resp = new ResponseVM();
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    HttpResponseMessage response = await client.GetAsync(url);
+                    client.DefaultRequestHeaders.Add("x-api-key", configureServices.Token);
+                    HttpResponseMessage response = await client.GetAsync(this.configureServices.Url);
                     response.EnsureSuccessStatusCode();
                     resp.body = await response.Content.ReadAsStringAsync();
                     resp.IsSuccess = true;
