@@ -80,21 +80,32 @@ namespace NatechAPI.Controllers
         [Route("{tag}/{page:int}/{pageSize:int}")]
         public async Task<IActionResult> Get(string tag,int page, int pageSize)
         {
-            if (page <= 0)
+            try
             {
-                return BadRequest("Page number must be greater than 0!");
-            }
+                if (page <= 0)
+                {
+                    return BadRequest("Page number must be greater than 0.");
+                }
 
-            if (pageSize <= 0)
-            {
-                return BadRequest("Page size must be greater than 0!");
+                if (pageSize <= 0)
+                {
+                    return BadRequest("Page size must be greater than 0.");
+                }
+
+                GetCatsPegResponseVM resp = await catsService.GetCatsWithPegination(tag.Trim(),page, pageSize);
+                if (resp != null)
+                {
+                    return Ok(resp);
+                }
+                else
+                {
+                    return StatusCode(500, $"Internal server error");
+                }
             }
-            if (string.IsNullOrEmpty(tag)) 
+            catch (Exception ex)
             {
-                return BadRequest("tag missing!");
+                return StatusCode(500, $"Internal server error");
             }
-            
-            return Ok();
         }
     }
 }
