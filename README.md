@@ -49,5 +49,8 @@ This endpoint returns a list of cats with paging support.
 
 This endpoint returns cats that have a specific tag with paging support.
 
+## Build and Run Locally (Bash)
+- dotnet build
+- dotnet run
 ## Swagger
-- API documentation is available at the /swagger endpoint: https://localhost:{Your_Port}/swagger/v1/swagger.json
+API documentation is available at the /swagger endpoint: https://localhost:{Your_Port}/swagger/v1/swagger.json
