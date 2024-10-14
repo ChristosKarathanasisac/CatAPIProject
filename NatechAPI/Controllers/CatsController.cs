@@ -11,9 +11,9 @@ namespace NatechAPI.Controllers
     [ApiController]
     public class CatsController : ControllerBase
     {
-        private readonly CatsService catsService;
+        private readonly ICatService catsService;
 
-        public CatsController(CatsService catsService)
+        public CatsController(ICatService catsService)
         {
             this.catsService = catsService;
         }

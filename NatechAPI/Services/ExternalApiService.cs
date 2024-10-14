@@ -5,9 +5,8 @@ using NatechAPI.Models.ViewModels;
 
 namespace NatechAPI.Services
 {
-    public class ExternalApiService 
+    public class ExternalApiService : IExternalApiService
     {
-        //private readonly ConfigureServices configureServices;
         private readonly ExternalApiSettings _externalApiSettings;
 
         public ExternalApiService(IOptions<ExternalApiSettings> externalApiSettings)

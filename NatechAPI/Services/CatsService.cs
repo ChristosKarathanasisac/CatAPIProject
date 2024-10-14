@@ -8,11 +8,11 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace NatechAPI.Services
 {
-    public class CatsService 
+    public class CatsService : ICatService
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly ExternalApiService externalApiService;
-        public CatsService(ApplicationDbContext context, ExternalApiService externalApiService)
+        private readonly IExternalApiService externalApiService;
+        public CatsService(ApplicationDbContext context, IExternalApiService externalApiService)
         {
             this.dbContext = context;
             this.externalApiService = externalApiService;
