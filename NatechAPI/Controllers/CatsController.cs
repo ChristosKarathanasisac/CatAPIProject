@@ -45,6 +45,37 @@ namespace NatechAPI.Controllers
         }
 
         [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                {
+                    return BadRequest("You must pass an Id");
+                }
+
+                ReturnedCatsVM resp = await catsService.GetCatById(id);
+                if (resp != null)
+                {
+                    if (string.IsNullOrEmpty(resp.CatId)) 
+                    {
+                        return NotFound();
+                    }
+                    return Ok(resp);
+                }
+                else
+                {
+                    return StatusCode(500, $"Internal server error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error");
+            }
+        }
+
+        [HttpGet]
         [Route("{page:int}/{pageSize:int}")]
         public async Task<IActionResult> Get(int page,int pageSize)
         {
@@ -90,6 +121,10 @@ namespace NatechAPI.Controllers
                 if (pageSize <= 0)
                 {
                     return BadRequest("Page size must be greater than 0.");
+                }
+                if (string.IsNullOrEmpty(tag))
+                {
+                    return BadRequest("Tag was empty.");
                 }
 
                 GetCatsPegResponseVM resp = await catsService.GetCatsWithPegination(tag.Trim(),page, pageSize);

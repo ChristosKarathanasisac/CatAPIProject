@@ -54,7 +54,42 @@ namespace NatechAPI.Services
                 return insCats;
             }
         }
-        public async Task<GetCatsPegResponseVM> GetCatsWithPegination(int page, int pageSize) 
+        public async Task<ReturnedCatsVM> GetCatById(string id)
+        {
+            try
+            {
+                CatEntity cat = await dbContext.Cats
+                                                    .Include(c => c.CatTags)
+                                                        .ThenInclude(ct => ct.TagEntity)
+                                                    .Where(c => c.CatId.Equals(id.Trim()))
+                                                    .FirstOrDefaultAsync();
+
+                if (cat != null)
+                {
+                    ReturnedCatsVM returnedCatsVM = new ReturnedCatsVM
+                    {
+                        CatId = cat.CatId,
+                        Width = cat.Width,
+                        Height = cat.Height,
+                        Image = cat.Image,
+                        Tags = string.Join(',', cat.CatTags.Select(ct => ct.TagEntity.Name).ToList())
+                    };
+                    return returnedCatsVM;
+                }
+                else 
+                {
+                    return new ReturnedCatsVM();
+                }
+                
+            }
+            catch (Exception exc)
+            {
+                //Some log
+                return null;
+            }
+        }
+
+        public async  Task<GetCatsPegResponseVM> GetCatsWithPegination(int page, int pageSize) 
         {
             try
             {
