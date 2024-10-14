@@ -1,15 +1,18 @@
 ﻿
+using Microsoft.Extensions.Options;
+using NatechAPI.Models.Config;
 using NatechAPI.Models.ViewModels;
 
 namespace NatechAPI.Services
 {
     public class ExternalApiService 
     {
-        private readonly ConfigureServices configureServices;
+        //private readonly ConfigureServices configureServices;
+        private readonly ExternalApiSettings _externalApiSettings;
 
-        public ExternalApiService(ConfigureServices configureServices)
+        public ExternalApiService(IOptions<ExternalApiSettings> externalApiSettings)
         {
-            this.configureServices = configureServices;
+            _externalApiSettings = externalApiSettings.Value;
         }
 
         public async Task<ExternalApiResponseVM> GetDataFromExternalApiAsync()
@@ -19,8 +22,8 @@ namespace NatechAPI.Services
             {
                 try
                 {
-                    client.DefaultRequestHeaders.Add("x-api-key", configureServices.Token);
-                    HttpResponseMessage response = await client.GetAsync(this.configureServices.Url);
+                    client.DefaultRequestHeaders.Add("x-api-key", _externalApiSettings.Token);
+                    HttpResponseMessage response = await client.GetAsync(_externalApiSettings.BaseUrl);
                     response.EnsureSuccessStatusCode();
                     resp.body = await response.Content.ReadAsStringAsync();
                     resp.IsSuccess = true;

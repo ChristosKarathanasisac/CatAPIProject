@@ -12,7 +12,7 @@ namespace NatechAPI.Services
     {
         private readonly ApplicationDbContext dbContext;
         private readonly ExternalApiService externalApiService;
-        public CatsService(ApplicationDbContext context, ExternalApiService externalApiService, ConfigureServices configureServices)
+        public CatsService(ApplicationDbContext context, ExternalApiService externalApiService)
         {
             this.dbContext = context;
             this.externalApiService = externalApiService;

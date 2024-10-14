@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NatechAPI.Data;
+using NatechAPI.Models.Config;
 using NatechAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<ConfigureServices>(
+//builder.Services.Configure<ConfigureServices>(
+//    builder.Configuration.GetSection("ExternalApi"));
+builder.Services.Configure<ExternalApiSettings>(
     builder.Configuration.GetSection("ExternalApi"));
 
 //Configure DBContext
@@ -21,7 +24,6 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 //Configure the Services
 builder.Services.AddTransient<ExternalApiService>(); 
 builder.Services.AddTransient<CatsService>();
-builder.Services.AddTransient<ConfigureServices>();
 
 var app = builder.Build();
 
